@@ -7,48 +7,47 @@
 #define _FINI_EVENT_H
 
 #include "fini_types.h"
-#include "fini_setup.h"
+#include "fini_typeid.h"
 
 #include "boost/cast.hpp"
 
 namespace Fini
 {
-
-class StateBase;
-	
 ///////////////////////////////////////////////////////////////////////////////
 
 class EventBase
 {
-	uint eventId_;
+	TypeInfo typeInfo_;
 	mutable bool discarded_;
 
-	EventBase(const uint eventId);
+	EventBase(TypeInfo typeInfo)
+		: typeInfo_(typeInfo), discarded_(false) {}
 
 public:
 	virtual ~EventBase() {}
 
 	template <typename T>
-	const bool isA() const;
+	const bool isA() const
+	{
+		return typeInfo_ == typeId<T>();
+	}
 
 	template <typename T>
 	const T* castTo() const
 	{
-		return (isA<T>() ? 
-#if FINI_NO_RTTI
-			static_cast<const T*>(this) 
-#else
-			boost::polymorphic_downcast<const T*>(this) 
-#endif
-			: NULL);
+		return (isA<T>() ? static_cast<const T*>(this) : NULL);
+	}
+	
+	bool isDiscarded() const
+	{
+		return discarded_;
 	}
 
-
-	bool isDiscarded() const;
-
 private:
-	void discard() const;
-	static const uint retrieveNewEventId();
+	void discard() const
+	{
+		discarded_ = true;
+	}
 
 	template <typename>	friend class Event;
 	friend class StateBase;
@@ -60,25 +59,8 @@ template <typename TMostDerived>
 class Event : public EventBase
 {
 protected:
-	Event() : EventBase(getEventId()) {}
-
-private:
-	static const uint getEventId()
-	{
-		static uint eventId = retrieveNewEventId();
-		return eventId;
-	}
-
-	friend class EventBase;
+	Event() : EventBase(typeId<TMostDerived>()) {}
 };
-
-///////////////////////////////////////////////////////////////////////////////
-	
-template <typename T>
-const bool EventBase::isA() const
-{
-	return eventId_ == Event<T>::getEventId();
-}
 	
 ///////////////////////////////////////////////////////////////////////////////
 	
