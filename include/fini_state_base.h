@@ -18,7 +18,7 @@ namespace Fini
 {
 
 class StateDesc;
-class Event;
+class EventBase;
 class Fsm;
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -65,7 +65,7 @@ public:
 
 	virtual ~StateBase();
 
-	EventResult processTreeEvent(const Event& evt);
+	EventResult processTreeEvent(const EventBase& evt);
 
 	const StateBase* getContextState(const StateDesc& contextStateDesc) const;
 	StateBase* getContextState(const StateDesc& contextStateDesc) { return const_cast<StateBase*>(const_cast<const StateBase*>(this)->getContextState(contextStateDesc)); }
@@ -131,7 +131,7 @@ public:
 		return EventResult::createTransited(transitParent);
 	}
 
-	void processEvent(const Event& evt);
+	void processEvent(const EventBase& evt);
 
 	template <typename TEvent>
 	void postEvent(const TEvent& evt)

@@ -11,7 +11,7 @@ namespace Fini
 {
 ///////////////////////////////////////////////////////////////////////////////
 
-Event::Event(const uint eventId)
+EventBase::EventBase(const uint eventId)
 : eventId_(eventId)
 , discarded_(false) 
 {
@@ -19,21 +19,21 @@ Event::Event(const uint eventId)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool Event::isDiscarded() const
+bool EventBase::isDiscarded() const
 {
 	return discarded_;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void Event::discard() const 
+void EventBase::discard() const 
 { 
 	discarded_ = true; 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-const uint Event::retrieveNewEventId()
+const uint EventBase::retrieveNewEventId()
 {
 	static uint newEventId = 0;
 	return newEventId++;

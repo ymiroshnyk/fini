@@ -105,7 +105,7 @@ void Fsm::terminate()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-EventResult Fsm::processEvent(const Event& evt)
+EventResult Fsm::processEvent(const EventBase& evt)
 {
 	// state machine is not fully created. you can't processEvent(). use postEvent()
 	FINI_CHECK(initiated_ && !unstableCount_);
@@ -134,7 +134,7 @@ const StateBase& Fsm::getState(const StateDesc& stateDesc) const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-ObjectsQueue<Event>& Fsm::getPostEventQueue()
+ObjectsQueue<EventBase>& Fsm::getPostEventQueue()
 {
 	FINI_CHECK(postEventsQueueIndex_ >=0 && postEventsQueueIndex_ <= 1);
 
@@ -155,10 +155,10 @@ void Fsm::processPostedEvents()
 	// todo?: здесь при неправильном бросании postEvent может возникнуть вечный цикл
 	while (!getPostEventQueue().empty())
 	{
-		ObjectsQueue<Event>& postEventsQueue = getPostEventQueue();
+		ObjectsQueue<EventBase>& postEventsQueue = getPostEventQueue();
 		postEventsQueueIndex_ = (postEventsQueueIndex_ + 1) % 2;
 
-		for (ObjectsQueue<Event>::Iterator it(postEventsQueue); it; ++it)
+		for (ObjectsQueue<EventBase>::Iterator it(postEventsQueue); it; ++it)
 		{
 			processEventPrivate(*it);
 		}
@@ -169,7 +169,7 @@ void Fsm::processPostedEvents()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-EventResult Fsm::processEventPrivate(const Event& evt)
+EventResult Fsm::processEventPrivate(const EventBase& evt)
 {
 	eventProcessing_ += 1;
 	const EventResult result = getState(*topStateDesc_).processTreeEvent(evt);

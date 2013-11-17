@@ -20,8 +20,8 @@ class Rule
 {
 public:
 	virtual ~Rule() {}
-	virtual bool isEventSuitable(const Event& evt) const = 0;
-	virtual boost::optional<uint> rule(StateBase& state, const Event& evt, uint iterationIndex) const = 0;
+	virtual bool isEventSuitable(const EventBase& evt) const = 0;
+	virtual boost::optional<uint> rule(StateBase& state, const EventBase& evt, uint iterationIndex) const = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -34,12 +34,12 @@ class RuleFunctor : public Rule
 public:
 	RuleFunctor(TFunctor functor) : functor_(functor) {}
 
-	virtual bool isEventSuitable(const Event& evt) const
+	virtual bool isEventSuitable(const EventBase& evt) const
 	{
 		return evt.isA<TEvent>();
 	}
 
-	virtual boost::optional<uint> rule(StateBase& state, const Event& evt, uint iterationIndex) const
+	virtual boost::optional<uint> rule(StateBase& state, const EventBase& evt, uint iterationIndex) const
 	{
 		//FINI_CHECK(&state.getStateDesc() == &StateDesc::instance<TState>());
 		FINI_CHECK(evt.isA<TEvent>());

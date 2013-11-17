@@ -19,7 +19,7 @@ namespace Ex
 // applyEvent with dynamic_cast<>() for virtual inheritance
 
 template <typename TState, typename TEvent>
-boost::optional<EventResult> applyEvent(StateBase& state, const Event& evt)
+boost::optional<EventResult> applyEvent(StateBase& state, const EventBase& evt)
 {
 	TState& stateTyped = dynamic_cast<TState&>(state);
 
@@ -33,7 +33,7 @@ boost::optional<EventResult> applyEvent(StateBase& state, const Event& evt)
 // deferEvent with dynamic_cast<>() for virtual inheritance
 
 template <typename TState, typename TEvent>
-boost::optional<EventResult> deferEvent(StateBase& state, const Event& evt)
+boost::optional<EventResult> deferEvent(StateBase& state, const EventBase& evt)
 {
 	TState& stateTyped = dynamic_cast<TState&>(state);
 

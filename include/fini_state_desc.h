@@ -20,11 +20,11 @@ namespace Fini
 {
 
 class StateBase;
-class Event;
+class EventBase;
 class Rule;
 
 typedef StateBase& (*CreateStateFunc)(uint8* poolPtr);
-typedef boost::optional<EventResult> (*ApplyEvent)(StateBase&, const Event&);
+typedef boost::optional<EventResult> (*ApplyEvent)(StateBase&, const EventBase&);
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -150,7 +150,7 @@ StateBase& createStateFunc(uint8* poolPtr)
 ///////////////////////////////////////////////////////////////////////////////
 
 template <typename TState, typename TEvent>
-boost::optional<EventResult> applyEvent(StateBase& state, const Event& evt)
+boost::optional<EventResult> applyEvent(StateBase& state, const EventBase& evt)
 {
 	TState& stateTyped = static_cast<TState&>(state);
 	
@@ -163,7 +163,7 @@ boost::optional<EventResult> applyEvent(StateBase& state, const Event& evt)
 ///////////////////////////////////////////////////////////////////////////////
 
 template <typename TState, typename TEvent>
-boost::optional<EventResult> deferEvent(StateBase& state, const Event& evt)
+boost::optional<EventResult> deferEvent(StateBase& state, const EventBase& evt)
 {
 	TState& stateTyped = static_cast<TState&>(state);
 

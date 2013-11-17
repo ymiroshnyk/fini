@@ -18,12 +18,12 @@ namespace Fini
 
 class RuleDefault : public Rule
 {
-	virtual bool isEventSuitable(const Event&) const 
+	virtual bool isEventSuitable(const EventBase&) const 
 	{ 
 		return true; 
 	}
 
-	virtual boost::optional<uint> rule(StateBase& state, const Event&, uint orthoIndex) const
+	virtual boost::optional<uint> rule(StateBase& state, const EventBase&, uint orthoIndex) const
 	{
 		if (orthoIndex < state.getStateDesc().getNumOrthoAreas())
 			return orthoIndex;
@@ -77,7 +77,7 @@ StateBase::~StateBase()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-EventResult StateBase::processTreeEvent(const Event& evt)
+EventResult StateBase::processTreeEvent(const EventBase& evt)
 {
 	FINI_CHECK(stateDesc_);
 
@@ -197,7 +197,7 @@ EventResult StateBase::transit(const StateDesc& stateDesc)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void StateBase::processEvent(const Event& evt)
+void StateBase::processEvent(const EventBase& evt)
 {
 	fsm().processEvent(evt);
 }

@@ -19,7 +19,7 @@ namespace Fini
 {
 
 class StateDesc;
-class Event;
+class EventBase;
 class StateBase;
 class StateOrthoArea;
 class ParameterKeeper;
@@ -45,8 +45,8 @@ class Fsm : boost::noncopyable
 	uint eventProcessing_;
 	ObjectsQueue<Castable<ParameterKeeper> > params_;
 	uint paramsNextClearSize_;
-	ObjectsQueue<Event> postEventsQueue0_;
-	ObjectsQueue<Event> postEventsQueue1_;
+	ObjectsQueue<EventBase> postEventsQueue0_;
+	ObjectsQueue<EventBase> postEventsQueue1_;
 	uint postEventsQueueIndex_;
 
 public:
@@ -59,7 +59,7 @@ public:
 	bool isInitiated() const { return initiated_; }
 	bool isEventProcessing() const { return eventProcessing_ != 0; }
 
-	EventResult processEvent(const Event& evt);
+	EventResult processEvent(const EventBase& evt);
 
 	template <typename TState>
 	void setParams(const typename TState::Parameters& params);
@@ -77,11 +77,11 @@ private:
 	StateBase& getState(const StateDesc& stateDesc);
 	const StateBase& getState(const StateDesc& stateDesc) const;
 
-	ObjectsQueue<Event>& getPostEventQueue();
+	ObjectsQueue<EventBase>& getPostEventQueue();
 
 	void processPostedEvents();
 
-	EventResult processEventPrivate(const Event& evt);
+	EventResult processEventPrivate(const EventBase& evt);
 
 	const StateDesc& transit(StateBase& sourceState, const StateDesc& targetStateDesc);
 

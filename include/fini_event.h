@@ -18,15 +18,15 @@ class StateBase;
 	
 ///////////////////////////////////////////////////////////////////////////////
 
-class Event
+class EventBase
 {
 	uint eventId_;
 	mutable bool discarded_;
 
-	Event(const uint eventId);
+	EventBase(const uint eventId);
 
 public:
-	virtual ~Event() {}
+	virtual ~EventBase() {}
 
 	template <typename T>
 	const bool isA() const;
@@ -50,17 +50,17 @@ private:
 	void discard() const;
 	static const uint retrieveNewEventId();
 
-	template <typename>	friend class EventTyped;
+	template <typename>	friend class Event;
 	friend class StateBase;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
 template <typename TMostDerived>
-class EventTyped : public Event
+class Event : public EventBase
 {
 protected:
-	EventTyped() : Event(getEventId()) {}
+	Event() : EventBase(getEventId()) {}
 
 private:
 	static const uint getEventId()
@@ -69,15 +69,15 @@ private:
 		return eventId;
 	}
 
-	friend class Event;
+	friend class EventBase;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 	
 template <typename T>
-const bool Event::isA() const
+const bool EventBase::isA() const
 {
-	return eventId_ == EventTyped<T>::getEventId();
+	return eventId_ == Event<T>::getEventId();
 }
 	
 ///////////////////////////////////////////////////////////////////////////////
